@@ -1,6 +1,6 @@
 # YelpSneaker
 
-A Node.js web application project
+A Node.js web application project.
 Following is the webpages of the application.
 
 Main Page
