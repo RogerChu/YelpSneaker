@@ -18,13 +18,11 @@ router.post("/register", function(req, res){
     var newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, function(err, user){
         if(err){
-            console.log(err);
-            req.flash("error", err.message);
-            return res.render("register");
+            return res.render("register", {"error": err.message});
         }
         passport.authenticate("local")(req, res, function(){
            req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
-           res.redirect("/campgrounds"); 
+           res.redirect("/sneakers"); 
         });
     });
 });
@@ -37,7 +35,7 @@ router.get("/login", function(req, res){
 //handling login logic
 router.post("/login", passport.authenticate("local", 
     {
-        successRedirect: "/campgrounds",
+        successRedirect: "/sneakers",
         failureRedirect: "/login"
     }), function(req, res){
 });
@@ -46,7 +44,7 @@ router.post("/login", passport.authenticate("local",
 router.get("/logout", function(req, res){
    req.logout();
    req.flash("success", "LOGGED YOU OUT!");
-   res.redirect("/campgrounds");
+   res.redirect("/sneakers");
 });
 
 

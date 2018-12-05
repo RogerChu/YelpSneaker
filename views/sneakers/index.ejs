@@ -1,0 +1,29 @@
+<% include ../partials/header %> 
+
+     <header class="jumbotron">
+         <div class="container">
+             <h1><span class="glyphicon glyphicon-gift"></span> Welcome To YelpSneaker!</h1>
+             <p>View our hand-picked colorful sneakers</p>
+             <p>
+                <a class="btn btn-primary btn-lg" href="/sneakers/new">Add New Sneaker</a>
+             </p>
+         </div>
+     </header>
+     
+     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% sneakers.forEach(function(sneaker){ %>
+            <div class="col-md-3 col-sm-6">
+                <div class="thumbnail">
+                   <img src="<%= sneaker.image %>">
+                   <div class="caption">
+                       <h4><%= sneaker.name %></h4>
+                   </div>
+                   <p>
+                       <a href="/sneakers/<%= sneaker._id %>" class="btn btn-primary">More Info</a>
+                   </p>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+<% include ../partials/footer %>

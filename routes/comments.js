@@ -1,29 +1,29 @@
 var express = require("express");
 var router  = express.Router({mergeParams: true});
-var Campground = require("../models/campground");
+var Sneaker = require("../models/sneaker");
 var Comment = require("../models/comment");
 var middleware = require("../middleware");
 
 //Comments New
 router.get("/new", middleware.isLoggedIn, function(req, res){
-    // find campground by id
+    // find sneaker by id
     console.log(req.params.id);
-    Campground.findById(req.params.id, function(err, campground){
+    Sneaker.findById(req.params.id, function(err, sneaker){
         if(err){
             console.log(err);
         } else {
-             res.render("comments/new", {campground: campground});
+             res.render("comments/new", {sneaker: sneaker});
         }
     })
 });
 
 //Comments Create
 router.post("/",middleware.isLoggedIn,function(req, res){
-   //lookup campground using ID
-   Campground.findById(req.params.id, function(err, campground){
+   //lookup sneaker using ID
+   Sneaker.findById(req.params.id, function(err, sneaker){
        if(err){
            console.log(err);
-           res.redirect("/campgrounds");
+           res.redirect("/sneakers");
        } else {
         Comment.create(req.body.comment, function(err, comment){
            if(err){
@@ -34,24 +34,25 @@ router.post("/",middleware.isLoggedIn,function(req, res){
                comment.author.username = req.user.username;
                //save comment
                comment.save();
-               campground.comments.push(comment);
-               campground.save();
+               console.log(sneaker);
+               sneaker.comments.push(comment);
+               sneaker.save();
                console.log(comment);
                req.flash('success', 'Created a comment!');
-               res.redirect('/campgrounds/' + campground._id);
+               res.redirect('/sneakers/' + sneaker._id);
            }
         });
        }
    });
 });
 
-router.get("/:commentId/edit", middleware.isLoggedIn, function(req, res){
-    // find campground by id
+router.get("/:commentId/edit", middleware.checkUserComment, function(req, res){
+    // find sneaker by id
     Comment.findById(req.params.commentId, function(err, comment){
         if(err){
-            console.log(err);
+            res.redirect("back");
         } else {
-             res.render("comments/edit", {campground_id: req.params.id, comment: comment});
+             res.render("comments/edit", {sneaker_id: req.params.id, comment: comment});
         }
     })
 });
@@ -61,7 +62,7 @@ router.put("/:commentId", function(req, res){
        if(err){
            res.render("edit");
        } else {
-           res.redirect("/campgrounds/" + req.params.id);
+           res.redirect("/sneakers/" + req.params.id);
        }
    }); 
 });
@@ -69,9 +70,10 @@ router.put("/:commentId", function(req, res){
 router.delete("/:commentId",middleware.checkUserComment, function(req, res){
     Comment.findByIdAndRemove(req.params.commentId, function(err){
         if(err){
-            console.log("PROBLEM!");
+            res.redirect("back");
         } else {
-            res.redirect("/campgrounds/" + req.params.id);
+            req.flash("success", "Comment deleted");
+            res.redirect("/sneakers/" + req.params.id);
         }
     })
 });
