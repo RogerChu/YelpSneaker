@@ -3,27 +3,28 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     passport    = require("passport"),
-    cookieParser = require("cookie-parser"),
     LocalStrategy = require("passport-local"),
     flash        = require("connect-flash"),
-    Campground  = require("./models/campground"),
+    Sneaker  = require("./models/sneaker"),
     Comment     = require("./models/comment"),
     User        = require("./models/user"),
     session = require("express-session"),
-    seedDB      = require("./seeds"),
+    //seedDB      = require("./seeds"),
     methodOverride = require("method-override");
     
 //requiring routes
 var commentRoutes    = require("./routes/comments"),
-    campgroundRoutes = require("./routes/campgrounds"),
+    sneakerRoutes = require("./routes/sneakers"),
     indexRoutes      = require("./routes/index")
     
-mongoose.connect("mongodb://localhost/yelp_camp_v9");
+//mongoose.connect("mongodb://localhost/yelp_camp_v9");
+mongoose.connect("mongodb://Roger:roger666@ds121624.mlab.com:21624/yelp_sneaker");
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride('_method'));
-app.use(cookieParser('secret'));
+//app.use(cookieParser('secret'));
 
 // seedDB(); //seed the database
 
@@ -50,9 +51,13 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
-app.use("/campgrounds", campgroundRoutes);
-app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/sneakers", sneakerRoutes);
+app.use("/sneakers/:id/comments", commentRoutes);
 
 app.listen(process.env.PORT, process.env.IP, function(){
    console.log("The YelpSneaker Server Has Started!");
 });
+
+//git add .
+//git commit -m "update"
+//git push heroku master
